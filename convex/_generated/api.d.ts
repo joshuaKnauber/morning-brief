@@ -19,6 +19,7 @@ import type * as routes_podcast_generatePodcast from "../routes/podcast/generate
 import type * as routes_podcast_podcasts from "../routes/podcast/podcasts.js";
 import type * as routes_research_research from "../routes/research/research.js";
 import type * as routes_script_write from "../routes/script/write.js";
+import type * as routes_topics from "../routes/topics.js";
 import type * as routes_users from "../routes/users.js";
 import type * as test_samplePodcast from "../test/samplePodcast.js";
 import type * as test_testPodcast from "../test/testPodcast.js";
@@ -41,6 +42,7 @@ declare const fullApi: ApiFromModules<{
   "routes/podcast/podcasts": typeof routes_podcast_podcasts;
   "routes/research/research": typeof routes_research_research;
   "routes/script/write": typeof routes_script_write;
+  "routes/topics": typeof routes_topics;
   "routes/users": typeof routes_users;
   "test/samplePodcast": typeof test_samplePodcast;
   "test/testPodcast": typeof test_testPodcast;
