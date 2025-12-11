@@ -1,9 +1,9 @@
 "use node";
 
-import { action } from "./_generated/server";
 import { v } from "convex/values";
 import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
-import { internal } from "./_generated/api";
+import { action } from "../../_generated/server";
+import { internal } from "../../_generated/api";
 
 export const generatePodcastEpisode = action({
   args: {
@@ -47,7 +47,7 @@ export const generatePodcastEpisode = action({
       new Blob([audioBuffer], { type: "audio/mpeg" })
     );
 
-    const podcastId = await ctx.runMutation(internal.podcasts.savePodcast, {
+    const podcastId = await ctx.runMutation(internal.routes.podcast.podcasts.savePodcast, {
       title: args.title,
       text: args.text,
       audioStorageId: storageId,

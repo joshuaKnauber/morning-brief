@@ -5,7 +5,7 @@ import { SAMPLE_PODCAST_EPISODE } from "./samplePodcast";
 // Test action to generate a sample podcast episode
 export const generateSamplePodcast = action({
   handler: async (ctx): Promise<any> => {
-    const result: any = await ctx.runAction(api.generatePodcast.generatePodcastEpisode, {
+    const result: any = await ctx.runAction(api.routes.podcast.generatePodcast.generatePodcastEpisode, {
       title: SAMPLE_PODCAST_EPISODE.title,
       text: SAMPLE_PODCAST_EPISODE.text,
     });
