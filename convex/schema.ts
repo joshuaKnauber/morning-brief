@@ -13,7 +13,7 @@ export default defineSchema({
   }),
   topics: defineTable({
     name: v.string(),
-    description: v.string(),
+    sources: v.optional(v.array(v.string())),
     userId: v.id("users"),
   }).index("by_user", ["userId"]),
 });
