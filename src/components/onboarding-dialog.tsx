@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 
 type Topic = {
   name: string;
-  sources: string[];
+  sources: string;
 };
 
 type OnboardingDialogProps = {
@@ -31,10 +31,7 @@ export function OnboardingDialog({ open, onComplete }: OnboardingDialogProps) {
 
     const newTopic: Topic = {
       name: topicName.trim(),
-      sources: sources
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean),
+      sources: sources.trim(),
     };
 
     setTopics([...topics, newTopic]);
@@ -98,11 +95,9 @@ export function OnboardingDialog({ open, onComplete }: OnboardingDialogProps) {
                   >
                     <div className="flex-1 min-w-0">
                       <p className="font-medium">{topic.name}</p>
-                      {topic.sources.length > 0 && (
-                        <p className="text-sm text-muted-foreground truncate">
-                          {topic.sources.join(", ")}
-                        </p>
-                      )}
+                      <p className="text-sm text-muted-foreground truncate">
+                        {topic.sources}
+                      </p>
                     </div>
                     <Button
                       variant="ghost"

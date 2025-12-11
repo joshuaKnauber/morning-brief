@@ -17,7 +17,7 @@ export const saveTopics = zUserMutation({
     topics: z.array(
       z.object({
         name: z.string(),
-        sources: z.array(z.string()),
+        sources: z.string(),
       }),
     ),
   },
@@ -25,7 +25,7 @@ export const saveTopics = zUserMutation({
     for (const topic of args.topics) {
       await ctx.db.insert("topics", {
         name: topic.name,
-        sources: topic.sources.length > 0 ? topic.sources : undefined,
+        sources: topic.sources,
         userId: ctx.user._id,
       });
     }
