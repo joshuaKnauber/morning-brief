@@ -44,7 +44,7 @@ export const researchUserTopics = internalAction({
           internal.routes.research.research.researchTopic,
           {
             topicDescription: topic.name,
-            sources: topic.sources?.join(", ") ?? "",
+            sources: topic.sources,
           },
         );
         return results;
