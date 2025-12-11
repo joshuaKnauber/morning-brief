@@ -42,7 +42,10 @@ export const researchUserTopics = internalAction({
       topics.map(async (topic) => {
         const results = await ctx.runAction(
           internal.routes.research.research.researchTopic,
-          { topicDescription: topic.description, sources: "" },
+          {
+            topicDescription: topic.name,
+            sources: topic.sources?.join(", ") ?? "",
+          },
         );
         return results;
       }),
