@@ -4,6 +4,12 @@ import { v } from "convex/values";
 
 export default defineSchema({
   ...authTables,
+  podcasts: defineTable({
+    title: v.string(),
+    text: v.string(),
+    audioStorageId: v.id("_storage"),
+    duration: v.optional(v.number()),
+  }),
   topics: defineTable({
     name: v.string(),
     description: v.string(),
