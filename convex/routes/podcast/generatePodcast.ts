@@ -1,16 +1,20 @@
 "use node";
 
-import { v } from "convex/values";
 import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
-import { action } from "../../_generated/server";
+import { v } from "convex/values";
 import { internal } from "../../_generated/api";
+import { internalAction } from "../../_generated/server";
 
-export const generatePodcastEpisode = action({
+export const generatePodcastEpisode = internalAction({
   args: {
     title: v.string(),
     text: v.string(),
+    userId: v.id("users"),
   },
-  handler: async (ctx, args): Promise<{ podcastId: any; storageId: any; message: string }> => {
+  handler: async (
+    ctx,
+    args,
+  ): Promise<{ podcastId: any; storageId: any; message: string }> => {
     const apiKey = process.env.ELEVENLABS_API_KEY;
 
     if (!apiKey) {
@@ -21,10 +25,13 @@ export const generatePodcastEpisode = action({
       apiKey,
     });
 
-    const audioStream = await client.textToSpeech.convert("21m00Tcm4TlvDq8ikWAM", {
-      text: args.text,
-      modelId: "eleven_monolingual_v1",
-    });
+    const audioStream = await client.textToSpeech.convert(
+      "21m00Tcm4TlvDq8ikWAM",
+      {
+        text: args.text,
+        modelId: "eleven_monolingual_v1",
+      },
+    );
 
     const reader = audioStream.getReader();
     const chunks: Uint8Array[] = [];
@@ -44,14 +51,18 @@ export const generatePodcastEpisode = action({
     }
 
     const storageId = await ctx.storage.store(
-      new Blob([audioBuffer], { type: "audio/mpeg" })
+      new Blob([audioBuffer], { type: "audio/mpeg" }),
     );
 
-    const podcastId = await ctx.runMutation(internal.routes.podcast.podcasts.savePodcast, {
-      title: args.title,
-      text: args.text,
-      audioStorageId: storageId,
-    });
+    const podcastId = await ctx.runMutation(
+      internal.routes.podcast.podcasts.savePodcast,
+      {
+        title: args.title,
+        text: args.text,
+        audioStorageId: storageId,
+        userId: args.userId,
+      },
+    );
 
     return {
       podcastId,

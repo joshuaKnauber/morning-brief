@@ -13,8 +13,8 @@ export const writeScript = internalAction({
           v.object({
             text: v.string(),
             url: v.string(),
-            title: v.string(),
-            publishedData: v.string(),
+            title: v.union(v.string(), v.null()),
+            publishedData: v.union(v.string(), v.null()),
           }),
         ),
       }),
@@ -36,8 +36,8 @@ async function scriptFromResults(
     results: {
       text: string;
       url: string;
-      title: string;
-      publishedData: string;
+      title: string | null;
+      publishedData: string | null;
     }[];
   }[],
 ) {
@@ -50,8 +50,8 @@ async function scriptFromResults(
           (result) => `
         Text: ${result.text}
         URL: ${result.url}
-        Title: ${result.title}
-        Published Data: ${result.publishedData}
+        Title: ${result.title ?? "-"}
+        Published Data: ${result.publishedData ?? "-"}
       `,
         )
         .join("\n")}

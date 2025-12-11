@@ -6,6 +6,7 @@ export const savePodcast = internalMutation({
     title: v.string(),
     text: v.string(),
     audioStorageId: v.id("_storage"),
+    userId: v.id("users"),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("podcasts", args);
