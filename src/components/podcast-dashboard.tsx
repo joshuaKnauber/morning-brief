@@ -1,12 +1,20 @@
 import { Doc } from "../../convex/_generated/dataModel";
+import {
+  Item,
+  ItemGroup,
+  ItemContent,
+  ItemTitle,
+  ItemDescription,
+} from "@/components/ui/item";
 
 type Podcast = Doc<"podcasts"> & { audioUrl: string | null };
 
 type PodcastDashboardProps = {
   podcasts: Podcast[];
+  onSelect: (podcast: Podcast) => void;
 };
 
-export function PodcastDashboard({ podcasts }: PodcastDashboardProps) {
+export function PodcastDashboard({ podcasts, onSelect }: PodcastDashboardProps) {
   if (podcasts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-8">
@@ -23,16 +31,12 @@ export function PodcastDashboard({ podcasts }: PodcastDashboardProps) {
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-8">
       {/* Latest podcast - featured */}
-      <div className="rounded-lg border p-6 space-y-4">
-        <div>
-          <p className="text-sm text-muted-foreground">Latest Brief</p>
-          <h2 className="text-2xl font-semibold">{latest.title}</h2>
-        </div>
-        {latest.audioUrl && (
-          <audio controls className="w-full" src={latest.audioUrl}>
-            Your browser does not support the audio element.
-          </audio>
-        )}
+      <div
+        className="rounded-lg border p-6 space-y-2 cursor-pointer hover:bg-accent/50 transition-colors"
+        onClick={() => onSelect(latest)}
+      >
+        <p className="text-sm text-muted-foreground">Latest Brief</p>
+        <h2 className="text-2xl font-semibold">{latest.title}</h2>
         {latest.duration && (
           <p className="text-sm text-muted-foreground">
             {Math.round(latest.duration / 60)} min
@@ -44,21 +48,24 @@ export function PodcastDashboard({ podcasts }: PodcastDashboardProps) {
       {previous.length > 0 && (
         <div className="space-y-4">
           <h3 className="text-lg font-medium">Previous Briefs</h3>
-          <div className="space-y-3">
+          <ItemGroup className="rounded-lg border divide-y">
             {previous.map((podcast) => (
-              <div
+              <Item
                 key={podcast._id}
-                className="rounded-md border p-4 space-y-2"
+                className="cursor-pointer hover:bg-accent/50"
+                onClick={() => onSelect(podcast)}
               >
-                <p className="font-medium">{podcast.title}</p>
-                {podcast.audioUrl && (
-                  <audio controls className="w-full h-10" src={podcast.audioUrl}>
-                    Your browser does not support the audio element.
-                  </audio>
-                )}
-              </div>
+                <ItemContent>
+                  <ItemTitle>{podcast.title}</ItemTitle>
+                  {podcast.duration && (
+                    <ItemDescription>
+                      {Math.round(podcast.duration / 60)} min
+                    </ItemDescription>
+                  )}
+                </ItemContent>
+              </Item>
             ))}
-          </div>
+          </ItemGroup>
         </div>
       )}
     </div>
