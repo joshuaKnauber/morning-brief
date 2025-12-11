@@ -28,6 +28,14 @@ import type {
   FunctionReference,
 } from "convex/server";
 
+/**
+ * A utility for referencing Convex functions in your app's API.
+ *
+ * Usage:
+ * ```js
+ * const myFunctionReference = api.myModule.myFunction;
+ * ```
+ */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   generatePodcast: typeof generatePodcast;
@@ -38,50 +46,19 @@ declare const fullApi: ApiFromModules<{
   "lib/zodConvex": typeof lib_zodConvex;
   podcasts: typeof podcasts;
   "routes/research/research": typeof routes_research_research;
+  "routes/script/write": typeof routes_script_write;
   "routes/users": typeof routes_users;
   "test/samplePodcast": typeof test_samplePodcast;
   "test/testPodcast": typeof test_testPodcast;
 }>;
-
-/**
- * A utility for referencing Convex functions in your app's public API.
- *
- * Usage:
- * ```js
- * const myFunctionReference = api.myModule.myFunction;
- * ```
- */
-<<<<<<< HEAD
-declare const fullApi: ApiFromModules<{
-  auth: typeof auth;
-  http: typeof http;
-  "lib/ai": typeof lib_ai;
-  "lib/exa": typeof lib_exa;
-  "lib/getUser": typeof lib_getUser;
-  "lib/zodConvex": typeof lib_zodConvex;
-  "routes/research/research": typeof routes_research_research;
-  "routes/script/write": typeof routes_script_write;
-  "routes/users": typeof routes_users;
-}>;
 declare const fullApiWithMounts: typeof fullApi;
 
-=======
->>>>>>> 822f6441f0f8e96a0482d03650d34f1938f8f1f4
 export declare const api: FilterApi<
-  typeof fullApi,
+  typeof fullApiWithMounts,
   FunctionReference<any, "public">
 >;
-
-/**
- * A utility for referencing Convex functions in your app's internal API.
- *
- * Usage:
- * ```js
- * const myFunctionReference = internal.myModule.myFunction;
- * ```
- */
 export declare const internal: FilterApi<
-  typeof fullApi,
+  typeof fullApiWithMounts,
   FunctionReference<any, "internal">
 >;
 
