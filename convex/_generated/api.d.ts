@@ -9,6 +9,7 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as crons from "../crons.js";
 import type * as generatePodcast from "../generatePodcast.js";
 import type * as http from "../http.js";
 import type * as lib_ai from "../lib/ai.js";
@@ -38,6 +39,7 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  crons: typeof crons;
   generatePodcast: typeof generatePodcast;
   http: typeof http;
   "lib/ai": typeof lib_ai;
