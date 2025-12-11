@@ -9,10 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignInRouteImport } from './routes/signIn'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
-import { Route as LayoutSignInRouteImport } from './routes/_layout/signIn'
 
+const SignInRoute = SignInRouteImport.update({
+  id: '/signIn',
+  path: '/signIn',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
   getParentRoute: () => rootRouteImport,
@@ -22,24 +27,19 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutSignInRoute = LayoutSignInRouteImport.update({
-  id: '/signIn',
-  path: '/signIn',
-  getParentRoute: () => LayoutRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
-  '/signIn': typeof LayoutSignInRoute
+  '/signIn': typeof SignInRoute
   '/': typeof LayoutIndexRoute
 }
 export interface FileRoutesByTo {
-  '/signIn': typeof LayoutSignInRoute
+  '/signIn': typeof SignInRoute
   '/': typeof LayoutIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_layout': typeof LayoutRouteWithChildren
-  '/_layout/signIn': typeof LayoutSignInRoute
+  '/signIn': typeof SignInRoute
   '/_layout/': typeof LayoutIndexRoute
 }
 export interface FileRouteTypes {
@@ -47,15 +47,23 @@ export interface FileRouteTypes {
   fullPaths: '/signIn' | '/'
   fileRoutesByTo: FileRoutesByTo
   to: '/signIn' | '/'
-  id: '__root__' | '/_layout' | '/_layout/signIn' | '/_layout/'
+  id: '__root__' | '/_layout' | '/signIn' | '/_layout/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
+  SignInRoute: typeof SignInRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signIn': {
+      id: '/signIn'
+      path: '/signIn'
+      fullPath: '/signIn'
+      preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_layout': {
       id: '/_layout'
       path: ''
@@ -70,23 +78,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/signIn': {
-      id: '/_layout/signIn'
-      path: '/signIn'
-      fullPath: '/signIn'
-      preLoaderRoute: typeof LayoutSignInRouteImport
-      parentRoute: typeof LayoutRoute
-    }
   }
 }
 
 interface LayoutRouteChildren {
-  LayoutSignInRoute: typeof LayoutSignInRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutSignInRoute: LayoutSignInRoute,
   LayoutIndexRoute: LayoutIndexRoute,
 }
 
@@ -95,6 +94,7 @@ const LayoutRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
+  SignInRoute: SignInRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

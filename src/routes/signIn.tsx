@@ -4,7 +4,7 @@ import { ArrowLeftIcon } from "@phosphor-icons/react";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { Authenticated } from "convex/react";
 
-export const Route = createFileRoute("/_layout/signIn")({
+export const Route = createFileRoute("/signIn")({
   component: RouteComponent,
 });
 

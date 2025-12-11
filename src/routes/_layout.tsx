@@ -1,4 +1,5 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Navigate, Outlet } from "@tanstack/react-router";
+import { Authenticated, Unauthenticated } from "convex/react";
 
 export const Route = createFileRoute("/_layout")({
   component: Layout,
@@ -7,7 +8,12 @@ export const Route = createFileRoute("/_layout")({
 function Layout() {
   return (
     <>
-      <Outlet />
+      <Authenticated>
+        <Outlet />
+      </Authenticated>
+      <Unauthenticated>
+        <Navigate to="/signIn" />
+      </Unauthenticated>
     </>
   );
 }
