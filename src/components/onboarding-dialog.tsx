@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { XIcon } from "lucide-react";
 import {
   Dialog,
@@ -19,12 +19,27 @@ type Topic = {
 type OnboardingDialogProps = {
   open: boolean;
   onComplete: (topics: Topic[]) => void;
+  onClose?: () => void;
+  existingTopics?: Topic[];
 };
 
-export function OnboardingDialog({ open, onComplete }: OnboardingDialogProps) {
-  const [topics, setTopics] = useState<Topic[]>([]);
+export function OnboardingDialog({
+  open,
+  onComplete,
+  onClose,
+  existingTopics,
+}: OnboardingDialogProps) {
+  const [topics, setTopics] = useState<Topic[]>(existingTopics ?? []);
   const [topicName, setTopicName] = useState("");
   const [sources, setSources] = useState("");
+
+  const isEditMode = existingTopics !== undefined;
+
+  useEffect(() => {
+    if (open && existingTopics) {
+      setTopics(existingTopics);
+    }
+  }, [open, existingTopics]);
 
   const handleAddTopic = () => {
     if (!topicName.trim()) return;
@@ -50,13 +65,16 @@ export function OnboardingDialog({ open, onComplete }: OnboardingDialogProps) {
   };
 
   return (
-    <Dialog open={open}>
-      <DialogContent showCloseButton={false} className="sm:max-w-md">
+    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose?.()}>
+      <DialogContent showCloseButton={isEditMode} className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Welcome! Set up your morning brief</DialogTitle>
+          <DialogTitle>
+            {isEditMode ? "Edit Topics" : "Welcome! Set up your morning brief"}
+          </DialogTitle>
           <DialogDescription>
-            Add topics you want to follow. For each topic, you can optionally
-            specify news sources.
+            {isEditMode
+              ? "Update your topics of interest."
+              : "Add topics you want to follow. For each topic, you can optionally specify news sources."}
           </DialogDescription>
         </DialogHeader>
 
@@ -120,7 +138,7 @@ export function OnboardingDialog({ open, onComplete }: OnboardingDialogProps) {
             onClick={handleComplete}
             disabled={topics.length === 0}
           >
-            Get Started
+            {isEditMode ? "Save Topics" : "Get Started"}
           </Button>
         </DialogFooter>
       </DialogContent>

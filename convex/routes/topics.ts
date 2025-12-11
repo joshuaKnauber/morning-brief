@@ -22,6 +22,17 @@ export const saveTopics = zUserMutation({
     ),
   },
   handler: async (ctx, args) => {
+    // Delete existing topics first
+    const existingTopics = await ctx.db
+      .query("topics")
+      .filter((q) => q.eq(q.field("userId"), ctx.user._id))
+      .collect();
+
+    for (const topic of existingTopics) {
+      await ctx.db.delete(topic._id);
+    }
+
+    // Insert new topics
     for (const topic of args.topics) {
       await ctx.db.insert("topics", {
         name: topic.name,

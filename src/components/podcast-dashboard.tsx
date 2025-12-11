@@ -14,7 +14,10 @@ type PodcastDashboardProps = {
   onSelect: (podcast: Podcast) => void;
 };
 
-export function PodcastDashboard({ podcasts, onSelect }: PodcastDashboardProps) {
+export function PodcastDashboard({
+  podcasts,
+  onSelect,
+}: PodcastDashboardProps) {
   if (podcasts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-8">
