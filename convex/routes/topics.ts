@@ -1,6 +1,16 @@
 import { v } from "convex/values";
-import { zUserMutation } from "../lib/zodConvex";
+import { zUserMutation, zUserQuery } from "../lib/zodConvex";
 import { z } from "zod/v3";
+
+export const getUserTopics = zUserQuery({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db
+      .query("topics")
+      .filter((q) => q.eq(q.field("userId"), ctx.user._id))
+      .collect();
+  },
+});
 
 export const saveTopics = zUserMutation({
   args: {

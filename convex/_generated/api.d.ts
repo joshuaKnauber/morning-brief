@@ -17,12 +17,12 @@ import type * as lib_getUser from "../lib/getUser.js";
 import type * as lib_zodConvex from "../lib/zodConvex.js";
 import type * as routes_podcast_generatePodcast from "../routes/podcast/generatePodcast.js";
 import type * as routes_podcast_podcasts from "../routes/podcast/podcasts.js";
+import type * as routes_podcasts from "../routes/podcasts.js";
 import type * as routes_research_research from "../routes/research/research.js";
 import type * as routes_script_write from "../routes/script/write.js";
 import type * as routes_topics from "../routes/topics.js";
 import type * as routes_users from "../routes/users.js";
 import type * as test_samplePodcast from "../test/samplePodcast.js";
-import type * as test_testPodcast from "../test/testPodcast.js";
 
 import type {
   ApiFromModules,
@@ -30,14 +30,6 @@ import type {
   FunctionReference,
 } from "convex/server";
 
-/**
- * A utility for referencing Convex functions in your app's API.
- *
- * Usage:
- * ```js
- * const myFunctionReference = api.myModule.myFunction;
- * ```
- */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   crons: typeof crons;
@@ -48,21 +40,37 @@ declare const fullApi: ApiFromModules<{
   "lib/zodConvex": typeof lib_zodConvex;
   "routes/podcast/generatePodcast": typeof routes_podcast_generatePodcast;
   "routes/podcast/podcasts": typeof routes_podcast_podcasts;
+  "routes/podcasts": typeof routes_podcasts;
   "routes/research/research": typeof routes_research_research;
   "routes/script/write": typeof routes_script_write;
   "routes/topics": typeof routes_topics;
   "routes/users": typeof routes_users;
   "test/samplePodcast": typeof test_samplePodcast;
-  "test/testPodcast": typeof test_testPodcast;
 }>;
-declare const fullApiWithMounts: typeof fullApi;
 
+/**
+ * A utility for referencing Convex functions in your app's public API.
+ *
+ * Usage:
+ * ```js
+ * const myFunctionReference = api.myModule.myFunction;
+ * ```
+ */
 export declare const api: FilterApi<
-  typeof fullApiWithMounts,
+  typeof fullApi,
   FunctionReference<any, "public">
 >;
+
+/**
+ * A utility for referencing Convex functions in your app's internal API.
+ *
+ * Usage:
+ * ```js
+ * const myFunctionReference = internal.myModule.myFunction;
+ * ```
+ */
 export declare const internal: FilterApi<
-  typeof fullApiWithMounts,
+  typeof fullApi,
   FunctionReference<any, "internal">
 >;
 

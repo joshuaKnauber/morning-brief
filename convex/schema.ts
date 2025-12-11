@@ -10,6 +10,7 @@ export default defineSchema({
     audioStorageId: v.id("_storage"),
     userId: v.id("users"),
     duration: v.optional(v.number()),
+    userId: v.id("users"),
   }),
   topics: defineTable({
     name: v.string(),
