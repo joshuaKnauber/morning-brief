@@ -15,6 +15,7 @@ import type * as lib_exa from "../lib/exa.js";
 import type * as lib_getUser from "../lib/getUser.js";
 import type * as lib_zodConvex from "../lib/zodConvex.js";
 import type * as routes_research_research from "../routes/research/research.js";
+import type * as routes_script_write from "../routes/script/write.js";
 import type * as routes_users from "../routes/users.js";
 
 import type {
@@ -39,6 +40,7 @@ declare const fullApi: ApiFromModules<{
   "lib/getUser": typeof lib_getUser;
   "lib/zodConvex": typeof lib_zodConvex;
   "routes/research/research": typeof routes_research_research;
+  "routes/script/write": typeof routes_script_write;
   "routes/users": typeof routes_users;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
