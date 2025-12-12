@@ -38,18 +38,20 @@ export const researchUserTopics = internalAction({
     const topics = await ctx.runQuery(internal.crons.getTopicsForUser, {
       userId: args.userId,
     });
-    const queryResults = await Promise.all(
-      topics.map(async (topic) => {
-        const results = await ctx.runAction(
-          internal.routes.research.research.researchTopic,
-          {
-            topicDescription: topic.name,
-            sources: topic.sources,
-          },
-        );
-        return results;
-      }),
-    );
+    const queryResults: Awaited<
+      Awaited<
+        typeof internal.routes.research.research.researchTopic._returnType
+      >
+    >[] = [];
+    for (const topic of topics) {
+      const results: Awaited<
+        typeof internal.routes.research.research.researchTopic._returnType
+      > = await ctx.runAction(internal.routes.research.research.researchTopic, {
+        topicDescription: topic.name,
+        sources: topic.sources,
+      });
+      queryResults.push(results);
+    }
     const { script, title } = await ctx.runAction(
       internal.routes.script.write.writeScript,
       {
