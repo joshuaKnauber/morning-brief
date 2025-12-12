@@ -29,7 +29,7 @@ export const generatePodcastEpisode = internalAction({
       "21m00Tcm4TlvDq8ikWAM",
       {
         text: args.text,
-        modelId: "eleven_monolingual_v1",
+        modelId: "eleven_turbo_v2_5",
       },
     );
 
