@@ -1,9 +1,37 @@
 "use node";
 
-import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
+import { TextToSpeechClient, protos } from "@google-cloud/text-to-speech";
 import { v } from "convex/values";
 import { internal } from "../../_generated/api";
 import { internalAction } from "../../_generated/server";
+
+/**
+ * Google Cloud Text-to-Speech Configuration
+ *
+ * Voice Options:
+ * - en-US-Journey-F: Female, conversational, latest neural voice (recommended)
+ * - en-US-Journey-D: Male, conversational, latest neural voice
+ * - en-US-Neural2-F: Female, high-quality neural voice
+ * - en-US-Neural2-D: Male, high-quality neural voice
+ * - en-US-Studio-O: Female, premium quality (Studio voices)
+ * - en-US-Studio-M: Male, premium quality (Studio voices)
+ *
+ * See: https://cloud.google.com/text-to-speech/docs/voices
+ */
+const TTS_CONFIG = {
+  VOICE: {
+    LANGUAGE_CODE: "en-US" as const,
+    NAME: "en-US-Journey-F" as const,
+  },
+
+  AUDIO: {
+    ENCODING: protos.google.cloud.texttospeech.v1.AudioEncoding.MP3,
+    MIME_TYPE: "audio/mpeg" as const,
+    PITCH: 0,
+    SPEAKING_RATE: 1.0,
+    VOLUME_GAIN_DB: 0,
+  },
+} as const;
 
 export const generatePodcastEpisode = internalAction({
   args: {
@@ -15,43 +43,43 @@ export const generatePodcastEpisode = internalAction({
     ctx,
     args,
   ): Promise<{ podcastId: any; storageId: any; message: string }> => {
-    const apiKey = process.env.ELEVENLABS_API_KEY;
+    const credentialsJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
 
-    if (!apiKey) {
-      throw new Error("ELEVENLABS_API_KEY is not set in environment variables");
+    if (!credentialsJson) {
+      throw new Error(
+        "GOOGLE_APPLICATION_CREDENTIALS_JSON is not set in environment variables",
+      );
     }
 
-    const client = new ElevenLabsClient({
-      apiKey,
+    const credentials = JSON.parse(credentialsJson);
+
+    const client = new TextToSpeechClient({
+      credentials,
     });
 
-    const audioStream = await client.textToSpeech.convert(
-      "21m00Tcm4TlvDq8ikWAM",
-      {
-        text: args.text,
-        modelId: "eleven_turbo_v2_5",
+    const [response] = await client.synthesizeSpeech({
+      input: { text: args.text },
+      voice: {
+        languageCode: TTS_CONFIG.VOICE.LANGUAGE_CODE,
+        name: TTS_CONFIG.VOICE.NAME,
       },
-    );
+      audioConfig: {
+        audioEncoding: TTS_CONFIG.AUDIO.ENCODING,
+        pitch: TTS_CONFIG.AUDIO.PITCH,
+        speakingRate: TTS_CONFIG.AUDIO.SPEAKING_RATE,
+        volumeGainDb: TTS_CONFIG.AUDIO.VOLUME_GAIN_DB,
+      },
+    });
 
-    const reader = audioStream.getReader();
-    const chunks: Uint8Array[] = [];
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      chunks.push(value);
+    if (!response.audioContent) {
+      throw new Error("No audio content received from Google TTS");
     }
 
-    const totalLength = chunks.reduce((acc, chunk) => acc + chunk.length, 0);
-    const audioBuffer = new Uint8Array(totalLength);
-    let offset = 0;
-    for (const chunk of chunks) {
-      audioBuffer.set(chunk, offset);
-      offset += chunk.length;
-    }
-
+    const audioBuffer = typeof response.audioContent === 'string'
+      ? new Uint8Array(Buffer.from(response.audioContent, 'binary'))
+      : new Uint8Array(response.audioContent);
     const storageId = await ctx.storage.store(
-      new Blob([audioBuffer], { type: "audio/mpeg" }),
+      new Blob([audioBuffer], { type: TTS_CONFIG.AUDIO.MIME_TYPE }),
     );
 
     const podcastId = await ctx.runMutation(

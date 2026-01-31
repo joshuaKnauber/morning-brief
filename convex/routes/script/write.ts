@@ -2,7 +2,7 @@ import { generateObject, generateText } from "ai";
 import { v } from "convex/values";
 import { z } from "zod/v4";
 import { internalAction } from "../../_generated/server";
-import { anthropic } from "../../lib/ai";
+import { openrouter } from "../../lib/ai";
 
 export const writeScript = internalAction({
   args: {
@@ -85,11 +85,11 @@ async function scriptFromResults(
       - Include context and explanations that make sense when heard, not read
       - Avoid phrases like "click here" or "see below" that only make sense in written form
 
-      # Output Format
+      # Output Formatq
       Respond with ONLY the plain text script, ready to be spoken. No formatting, no metadata, no preamble.
     `;
   const { text } = await generateText({
-    model: anthropic("claude-sonnet-4-5-20250929"),
+    model: openrouter("tngtech/deepseek-r1t2-chimera:free"),
     temperature: 0.2,
     messages: [
       {
@@ -113,7 +113,7 @@ async function createTitleFromScript(script: string) {
     You are a helpful assistant that creates a title for a given morning update podcast script.
   `;
   const { object } = await generateObject({
-    model: anthropic("claude-sonnet-4-5-20250929"),
+    model: openrouter("tngtech/deepseek-r1t2-chimera:free"),
     temperature: 0.2,
     schema: z.object({
       title: z.string().describe("The title of the podcast"),

@@ -2,7 +2,7 @@ import { generateObject } from "ai";
 import { v } from "convex/values";
 import { z } from "zod/v4";
 import { internalAction } from "../../_generated/server";
-import { anthropic } from "../../lib/ai";
+import { openrouter } from "../../lib/ai";
 import { exa } from "../../lib/exa";
 
 export const researchTopic = internalAction({
@@ -50,7 +50,7 @@ async function generateQueries(topicDescription: string, sources: string) {
     You are a helpful assistant that generates queries to search for a given topic.
   `;
   const { object } = await generateObject({
-    model: anthropic("claude-sonnet-4-5-20250929"),
+    model: openrouter("tngtech/deepseek-r1t2-chimera:free"),
     temperature: 0.2,
     schema: z.object({
       queries: z.array(z.string()).describe("Queries to search for"),
@@ -78,7 +78,7 @@ async function summarizeWebsiteText(text: string) {
     Make sure to include the most important information and the most relevant details.
   `;
   const { object } = await generateObject({
-    model: anthropic("claude-sonnet-4-5-20250929"),
+    model: openrouter("tngtech/deepseek-r1t2-chimera:free"),
     temperature: 0.2,
     schema: z.object({
       summary: z.string().describe("Summary of the text"),

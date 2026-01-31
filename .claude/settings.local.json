@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:docs.convex.dev)",
-      "Bash(npx convex dev:*)"
+      "Bash(npx convex dev:*)",
+      "Bash(tree:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []
