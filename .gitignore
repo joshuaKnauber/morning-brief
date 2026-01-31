@@ -28,3 +28,6 @@ morning-brief-*.json
 
 .env
 
+# Test output
+convex/test/output/
+

@@ -10,7 +10,9 @@
     "predev": "convex dev --until-success && convex dev --once --run-sh \"node setup.mjs --once\" && convex dashboard",
     "build": "tsc -b && vite build",
     "lint": "tsc && eslint .  --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:prompts": "cd convex && bun test/testPrompts.ts",
+    "test:podcast": "cd convex && bun test/testPrompts.ts --full"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^2.0.55",
@@ -19,6 +21,8 @@
     "@convex-dev/resend": "^0.1.13",
     "@google-cloud/text-to-speech": "^5.7.0",
     "@hookform/resolvers": "^5.2.2",
+    "@nudge-ai/cli": "^0.0.1-beta.4",
+    "@nudge-ai/core": "^0.0.1-beta.1",
     "@openrouter/ai-sdk-provider": "^1.2.8",
     "@phosphor-icons/react": "^2.1.10",
     "@radix-ui/react-accordion": "^1.2.12",

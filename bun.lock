@@ -11,6 +11,8 @@
         "@convex-dev/resend": "^0.1.13",
         "@google-cloud/text-to-speech": "^5.7.0",
         "@hookform/resolvers": "^5.2.2",
+        "@nudge-ai/cli": "^0.0.1-beta.4",
+        "@nudge-ai/core": "^0.0.1-beta.1",
         "@openrouter/ai-sdk-provider": "^1.2.8",
         "@phosphor-icons/react": "^2.1.10",
         "@radix-ui/react-accordion": "^1.2.12",
@@ -472,6 +474,10 @@
     "@node-rs/bcrypt-win32-ia32-msvc": ["@node-rs/bcrypt-win32-ia32-msvc@1.9.0", "", { "os": "win32", "cpu": "ia32" }, "sha512-kqxalCvhs4FkN0+gWWfa4Bdy2NQAkfiqq/CEf6mNXC13RSV673Ev9V8sRlQyNpCHCNkeXfOT9pgoBdJmMs9muA=="],
 
     "@node-rs/bcrypt-win32-x64-msvc": ["@node-rs/bcrypt-win32-x64-msvc@1.9.0", "", { "os": "win32", "cpu": "x64" }, "sha512-2y0Tuo6ZAT2Cz8V7DHulSlv1Bip3zbzeXyeur+uR25IRNYXKvI/P99Zl85Fbuu/zzYAZRLLlGTRe6/9IHofe/w=="],
+
+    "@nudge-ai/cli": ["@nudge-ai/cli@0.0.1-beta.4", "", { "dependencies": { "@nudge-ai/core": "^0.0.1-beta.1" }, "peerDependencies": { "zod": "^3.23.0 || ^4.0.0" }, "bin": { "nudge": "dist/bin.cjs" } }, "sha512-FSw8zgqrHr2pltLk35lLxG+NTbovuOsDOSzbQOS1+IVCYRkaZTNdCrYbIT7ZbrYy8Rf59Ge7Zwu/0ivyZx8Rrg=="],
+
+    "@nudge-ai/core": ["@nudge-ai/core@0.0.1-beta.1", "", {}, "sha512-7PSfwaiMZ2Ml3SCI+AOdi4sFJuiXipL/R9ClEsGRqNZcwaYx2enR7pDsc2RvmENAlXpxZ6Xv4ejcdrM0Gku6ng=="],
 
     "@openrouter/ai-sdk-provider": ["@openrouter/ai-sdk-provider@1.5.3", "", { "dependencies": { "@openrouter/sdk": "^0.1.27" }, "peerDependencies": { "@toon-format/toon": "^2.0.0", "ai": "^5.0.0", "zod": "^3.24.1 || ^v4" }, "optionalPeers": ["@toon-format/toon"] }, "sha512-7SZmmLdp0x1wwuwZARn5R19ZSySHmTiUEM8IvN7O5r3ZH4drI1//BsLpfw56YFsBXu34VRtQzyvko1FLIcgtRg=="],
 

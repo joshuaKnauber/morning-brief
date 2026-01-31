@@ -1,9 +1,12 @@
-import { generateObject } from "ai";
+import "../../src/prompts.gen";
+import { generateObject, generateText } from "ai";
 import { v } from "convex/values";
 import { z } from "zod/v4";
 import { internalAction } from "../../_generated/server";
 import { openrouter } from "../../lib/ai";
 import { exa } from "../../lib/exa";
+import { reasearchPrompt } from "../../src/prompts/research.prompt";
+import { summarizePrompt } from "../../src/prompts/summarize.prompt";
 
 export const researchTopic = internalAction({
   args: { topicDescription: v.string(), sources: v.optional(v.string()) },
@@ -46,53 +49,27 @@ export const researchTopic = internalAction({
 });
 
 async function generateQueries(topicDescription: string, sources: string) {
-  const systemPrompt = `
-    You are a helpful assistant that generates queries to search for a given topic.
-  `;
   const { object } = await generateObject({
     model: openrouter("tngtech/deepseek-r1t2-chimera:free"),
     temperature: 0.2,
     schema: z.object({
       queries: z.array(z.string()).describe("Queries to search for"),
     }),
-    messages: [
-      {
-        role: "system",
-        content: systemPrompt,
-      },
-      {
-        role: "user",
-        content: `
-Topic: ${topicDescription}
-${sources ? `Sources: ${sources}` : ""}`.trim(),
-      },
-    ],
+    prompt: reasearchPrompt.toString({
+      topicDescription,
+      hasSources: Boolean(sources),
+      sources,
+    })
   });
 
   return object.queries;
 }
 
 async function summarizeWebsiteText(text: string) {
-  const systemPrompt = `
-    You are a helpful assistant that summarizes the text of a website.
-    Make sure to include the most important information and the most relevant details.
-  `;
-  const { object } = await generateObject({
+  const { text: summary } = await generateText({
     model: openrouter("tngtech/deepseek-r1t2-chimera:free"),
     temperature: 0.2,
-    schema: z.object({
-      summary: z.string().describe("Summary of the text"),
-    }),
-    messages: [
-      {
-        role: "system",
-        content: systemPrompt,
-      },
-      {
-        role: "user",
-        content: text,
-      },
-    ],
+    prompt: summarizePrompt.toString({ text }),
   });
-  return object.summary;
+  return summary;
 }
