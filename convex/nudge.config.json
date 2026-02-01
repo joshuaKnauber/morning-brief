@@ -1,4 +1,5 @@
 {
+  "generatedFile": "_generated/prompts.gen.ts",
   "ai": {
     "provider": "openrouter",
     "apiKeyEnvVar": "OPENROUTER_API_KEY",
